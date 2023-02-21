@@ -54,8 +54,8 @@ impl Contract {
             owner_id,
             NFTContractMetadata {
                 spec: NFT_METADATA_SPEC.to_string(),
-                name: "Example NEAR non-fungible token".to_string(),
-                symbol: "EXAMPLE".to_string(),
+                name: "Rabbit NFTs".to_string(),
+                symbol: "RABBIT".to_string(),
                 icon: Some(DATA_IMAGE_SVG_NEAR_ICON.to_string()),
                 base_uri: None,
                 reference: None,
@@ -95,7 +95,8 @@ impl Contract {
         receiver_id: AccountId,
         token_metadata: TokenMetadata,
     ) -> Token {
-        self.tokens.mint(token_id, receiver_id, Some(token_metadata))
+        assert_eq!(env::predecessor_account_id(), self.tokens.owner_id, "Unauthorized");
+        self.tokens.internal_mint(token_id, receiver_id, Some(token_metadata))
     }
 }
 
