@@ -1,5 +1,8 @@
 use crate::*;
-use near_sdk::{serde::{Deserialize, Serialize}, BlockHeight};
+use near_sdk::{
+    serde::{Deserialize, Serialize},
+    BlockHeight,
+};
 
 #[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize, PartialEq, Debug)]
 #[serde(crate = "near_sdk::serde")]
@@ -7,6 +10,12 @@ pub enum Rarity {
     Conmon,
     Rare,
     Mythic,
+}
+
+#[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize, PartialEq, Debug)]
+#[serde(crate = "near_sdk::serde")]
+pub struct  TokenMetadataExtend {
+    pub rarity: Rarity,
 }
 
 #[derive(Serialize, Deserialize)]
