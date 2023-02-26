@@ -4,17 +4,18 @@ use near_sdk::{
     BlockHeight,
 };
 
-#[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize, PartialEq, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
+#[cfg_attr(not(target_arch = "wasm32"), derive(Debug))]
 pub enum Rarity {
-    Conmon,
+    Common,
     Rare,
     Mythic,
 }
 
-#[derive(Serialize, Deserialize, BorshDeserialize, BorshSerialize, PartialEq, Debug)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
-pub struct  TokenMetadataExtend {
+pub struct TokenMetadataExtend {
     pub rarity: Rarity,
 }
 
@@ -23,8 +24,8 @@ pub struct  TokenMetadataExtend {
 pub struct MetadataJson {
     pub title: Option<String>,
     pub description: Option<String>,
+    pub media: Option<String>,
     pub rarity: Rarity,
-    pub starts_at: BlockHeight,
-    pub expires_at: BlockHeight,
-    pub media: Option<String>, // URL to associated media, preferably to decentralized, content-addressed storage
+    pub starts_at: Option<String>,
+    pub expires_at: Option<String>,
 }
