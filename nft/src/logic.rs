@@ -13,7 +13,7 @@ impl Contract {
     /// `self.tokens.mint` will enforce `predecessor_account_id` to equal the `owner_id` given in
     /// initialization call to `new`.
     #[payable]
-    pub fn nft_mint(&mut self, rarity: Rarity) -> Token {
+    pub fn nft_mint(&mut self, title: Option<String>, rarity: Rarity) -> Token {
         let receiver_id = env::predecessor_account_id();
         let deposit = env::attached_deposit();
 
@@ -33,20 +33,19 @@ impl Contract {
                 // _rarity = Rarity::Mythic;
                 check_deposit_near = deposit == TEN_NEAR;
                 media = URL_MYTHIC_NFT;
-            }
-            // _ => unreachable!(),
+            } // _ => unreachable!(),
         };
 
         assert!(check_deposit_near, "Deposit Near wrong!");
 
         let mut token_metadata = default_metadata();
+
+        token_metadata.title = title;
         token_metadata.media = Some(media.to_owned());
         token_metadata.starts_at = Some(env::block_timestamp().to_string());
         token_metadata.expires_at = Some((env::block_timestamp() + DEFAULT_EXPIRES).to_string());
-        self.token_metadata_extend.insert(
-            &self.token_id.to_string(),
-            &TokenMetadataExtend { rarity },
-        );
+        self.token_metadata_extend
+            .insert(&self.token_id.to_string(), &TokenMetadataExtend { rarity });
         let token =
             self.tokens
                 .internal_mint(self.token_id.to_string(), receiver_id, Some(token_metadata));
