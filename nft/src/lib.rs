@@ -22,7 +22,7 @@ use near_contract_standards::non_fungible_token::metadata::{
 use near_contract_standards::non_fungible_token::NonFungibleToken;
 use near_contract_standards::non_fungible_token::{Token, TokenId};
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::collections::{LazyOption, UnorderedMap, UnorderedSet};
+use near_sdk::collections::{LazyOption, UnorderedMap};
 use near_sdk::{
     env, near_bindgen, AccountId, BorshStorageKey, PanicOnDefault, Promise, PromiseOrValue,
 };
@@ -171,15 +171,17 @@ mod tests {
 
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(MINT_STORAGE_COST)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
 
         let token_id = "0".to_string();
-        let token = contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+        let title = "title".to_lowercase();
+        let rarity = Rarity::Common;
+        let token = contract.nft_mint(Some(title.clone()), rarity);
         assert_eq!(token.token_id, token_id);
         assert_eq!(token.owner_id.to_string(), accounts(0).to_string());
-        assert_eq!(token.metadata.unwrap(), sample_token_metadata());
+        assert_eq!(token.metadata.unwrap().title.unwrap(), title);
         assert_eq!(token.approved_account_ids.unwrap(), HashMap::new());
     }
 
@@ -191,11 +193,13 @@ mod tests {
 
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(MINT_STORAGE_COST)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         let token_id = "0".to_string();
-        contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+        let title = "title".to_lowercase();
+        let rarity = Rarity::Common;
+        contract.nft_mint(Some(title), rarity);
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -213,7 +217,6 @@ mod tests {
         if let Some(token) = contract.nft_token(token_id.clone()) {
             assert_eq!(token.token_id, token_id);
             assert_eq!(token.owner_id.to_string(), accounts(1).to_string());
-            assert_eq!(token.metadata.unwrap(), sample_token_metadata());
             assert_eq!(token.approved_account_ids.unwrap(), HashMap::new());
         } else {
             panic!("token not correctly created, or not found by nft_token");
@@ -228,11 +231,13 @@ mod tests {
 
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(MINT_STORAGE_COST)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         let token_id = "0".to_string();
-        contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+        let title = "title".to_lowercase();
+        let rarity = Rarity::Common;
+        contract.nft_mint(Some(title), rarity);
 
         // alice approves bob
         testing_env!(context
@@ -259,16 +264,18 @@ mod tests {
 
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(MINT_STORAGE_COST)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         let token_id = "0".to_string();
-        contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+        let title = "title".to_lowercase();
+        let rarity = Rarity::Common;
+        contract.nft_mint(Some(title), rarity);
 
         // alice approves bob
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(150000000000000000000)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         contract.nft_approve(token_id.clone(), accounts(1), None);
@@ -297,16 +304,18 @@ mod tests {
 
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(MINT_STORAGE_COST)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         let token_id = "0".to_string();
-        contract.nft_mint(token_id.clone(), accounts(0), sample_token_metadata());
+        let title = "title".to_lowercase();
+        let rarity = Rarity::Common;
+        contract.nft_mint(Some(title), rarity);
 
         // alice approves bob
         testing_env!(context
             .storage_usage(env::storage_usage())
-            .attached_deposit(150000000000000000000)
+            .attached_deposit(ONE_NEAR)
             .predecessor_account_id(accounts(0))
             .build());
         contract.nft_approve(token_id.clone(), accounts(1), None);
