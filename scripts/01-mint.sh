@@ -43,5 +43,5 @@ near call $CONTRACT_ID --accountId=$ACCOUNT_ID extend_expired '{"token_id": "3",
 #     "time": 2592000000000000 --> u64. unix nano second
 # }
 
-# 6. Get tokens id by owner
+# 6. Get tokens metadata id by owner
 near view $CONTRACT_ID get_tokens_metadata_by_owner '{"owner_id" : "'$ACCOUNT_ID'"}'
