@@ -45,6 +45,3 @@ near call $CONTRACT_ID --accountId=$ACCOUNT_ID extend_expired '{"token_id": "3",
 
 # 6. Get tokens id by owner
 near view $CONTRACT_ID get_tokens_metadata_by_owner '{"owner_id" : "'$ACCOUNT_ID'"}'
-
-
-near view $CONTRACT_ID nft_token '{"token_id": "3"}'
