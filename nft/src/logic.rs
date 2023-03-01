@@ -1,23 +1,14 @@
-use near_sdk::log;
-
 use crate::*;
 
 #[near_bindgen]
 impl Contract {
-    /// Mint a new token with ID=`token_id` belonging to `receiver_id`.
-    ///
-    /// Since this example implements metadata, it also requires per-token metadata to be provided
-    /// in this call. `self.tokens.mint` will also require it to be Some, since
-    /// `StorageKey::TokenMetadata` was provided at initialization.
-    ///
-    /// `self.tokens.mint` will enforce `predecessor_account_id` to equal the `owner_id` given in
-    /// initialization call to `new`.
+    /// Mint a new token
     #[payable]
     pub fn nft_mint(&mut self, title: Option<String>, rarity: Rarity) -> Token {
         let receiver_id = env::predecessor_account_id();
         let deposit = env::attached_deposit();
 
-        let mut check_deposit_near = false;
+        let check_deposit_near;
         let mut media = URL_COMMON_NFT;
         let mut _rarity = Rarity::Common;
         match rarity {
@@ -65,7 +56,6 @@ impl Contract {
         let mut token_metadata = token_metadata.unwrap();
         token_metadata.expires_at =
             Some((token_metadata.expires_at.unwrap().parse::<u64>().unwrap() + time).to_string());
-        log!("Expires ===> {:?}", token_metadata.expires_at);
         self.tokens
             .token_metadata_by_id
             .as_mut()

@@ -1,7 +1,6 @@
 use crate::*;
 use near_sdk::{
     serde::{Deserialize, Serialize},
-    BlockHeight,
 };
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]

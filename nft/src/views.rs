@@ -12,15 +12,15 @@ impl Contract {
             media: token.metadata.clone().unwrap().description,
             rarity,
             starts_at: token.metadata.clone().unwrap().starts_at,
-            expires_at: token.metadata.clone().unwrap().expires_at,
+            expires_at: token.metadata.unwrap().expires_at,
         })
     }
 
     pub fn get_nfts_by_owner(&self, owner_id: AccountId) -> Option<Vec<TokenId>> {
-        match &self.tokens.tokens_per_owner {
-            Some(tokens) => Some(tokens.get(&owner_id).unwrap().to_vec()),
-            None => None,
-        }
+        self.tokens
+            .tokens_per_owner
+            .as_ref()
+            .map(|tokens| tokens.get(&owner_id).unwrap().to_vec())
     }
 
     pub fn get_tokens_metadata_by_owner(&self, owner_id: AccountId) -> Vec<TokenMetadata> {

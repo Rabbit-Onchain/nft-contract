@@ -118,7 +118,7 @@ mod tests {
 
     use super::*;
 
-    const MINT_STORAGE_COST: u128 = 5870000000000000000000;
+    // const MINT_STORAGE_COST: u128 = 5870000000000000000000;
 
     fn get_context(predecessor_account_id: AccountId) -> VMContextBuilder {
         let mut builder = VMContextBuilder::new();
@@ -129,28 +129,28 @@ mod tests {
         builder
     }
 
-    fn sample_token_metadata() -> TokenMetadata {
-        TokenMetadata {
-            title: Some("Olympus Mons".into()),
-            description: Some("The tallest mountain in the charted solar system".into()),
-            media: None,
-            media_hash: None,
-            copies: Some(1u64),
-            issued_at: None,
-            expires_at: None,
-            starts_at: None,
-            updated_at: None,
-            extra: None,
-            reference: None,
-            reference_hash: None,
-        }
-    }
+    // fn sample_token_metadata() -> TokenMetadata {
+    //     TokenMetadata {
+    //         title: Some("Olympus Mons".into()),
+    //         description: Some("The tallest mountain in the charted solar system".into()),
+    //         media: None,
+    //         media_hash: None,
+    //         copies: Some(1u64),
+    //         issued_at: None,
+    //         expires_at: None,
+    //         starts_at: None,
+    //         updated_at: None,
+    //         extra: None,
+    //         reference: None,
+    //         reference_hash: None,
+    //     }
+    // }
 
     #[test]
     fn test_new() {
         let mut context = get_context(accounts(1));
         testing_env!(context.build());
-        let contract = Contract::new_default_meta(accounts(1).into());
+        let contract = Contract::new_default_meta(accounts(1));
         testing_env!(context.is_view(true).build());
         assert_eq!(contract.nft_token("1".to_string()), None);
     }
@@ -167,7 +167,7 @@ mod tests {
     fn test_mint() {
         let mut context = get_context(accounts(0));
         testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(0).into());
+        let mut contract = Contract::new_default_meta(accounts(0));
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -189,7 +189,7 @@ mod tests {
     fn test_transfer() {
         let mut context = get_context(accounts(0));
         testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(0).into());
+        let mut contract = Contract::new_default_meta(accounts(0));
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -227,7 +227,7 @@ mod tests {
     fn test_approve() {
         let mut context = get_context(accounts(0));
         testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(0).into());
+        let mut contract = Contract::new_default_meta(accounts(0));
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -253,14 +253,14 @@ mod tests {
             .is_view(true)
             .attached_deposit(0)
             .build());
-        assert!(contract.nft_is_approved(token_id.clone(), accounts(1), Some(1)));
+        assert!(contract.nft_is_approved(token_id, accounts(1), Some(1)));
     }
 
     #[test]
     fn test_revoke() {
         let mut context = get_context(accounts(0));
         testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(0).into());
+        let mut contract = Contract::new_default_meta(accounts(0));
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -293,14 +293,14 @@ mod tests {
             .is_view(true)
             .attached_deposit(0)
             .build());
-        assert!(!contract.nft_is_approved(token_id.clone(), accounts(1), None));
+        assert!(!contract.nft_is_approved(token_id, accounts(1), None));
     }
 
     #[test]
     fn test_revoke_all() {
         let mut context = get_context(accounts(0));
         testing_env!(context.build());
-        let mut contract = Contract::new_default_meta(accounts(0).into());
+        let mut contract = Contract::new_default_meta(accounts(0));
 
         testing_env!(context
             .storage_usage(env::storage_usage())
@@ -333,6 +333,6 @@ mod tests {
             .is_view(true)
             .attached_deposit(0)
             .build());
-        assert!(!contract.nft_is_approved(token_id.clone(), accounts(1), Some(1)));
+        assert!(!contract.nft_is_approved(token_id, accounts(1), Some(1)));
     }
 }

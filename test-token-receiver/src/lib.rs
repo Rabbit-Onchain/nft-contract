@@ -24,7 +24,7 @@ pub trait ValueReturnTrait {
 impl TokenReceiver {
     #[init]
     pub fn new(non_fungible_token_account_id: AccountId) -> Self {
-        Self { non_fungible_token_account_id: non_fungible_token_account_id.into() }
+        Self { non_fungible_token_account_id }
     }
 }
 
