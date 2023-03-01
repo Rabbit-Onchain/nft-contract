@@ -22,4 +22,31 @@ impl Contract {
             None => None,
         }
     }
+
+    pub fn get_tokens_metadata_by_owner(&self, owner_id: AccountId) -> Vec<TokenMetadata> {
+        let tokens = self
+            .tokens
+            .tokens_per_owner
+            .as_ref()
+            .unwrap()
+            .get(&owner_id);
+        if tokens.is_none() {
+            return Vec::new();
+        }
+
+        let metadata = tokens
+            .unwrap()
+            .iter()
+            .map(|x| {
+                self.tokens
+                    .token_metadata_by_id
+                    .as_ref()
+                    .unwrap()
+                    .get(&x)
+                    .unwrap()
+            })
+            .collect::<Vec<_>>();
+
+        metadata
+    }
 }
