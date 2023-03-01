@@ -23,7 +23,7 @@ impl Contract {
             .map(|tokens| tokens.get(&owner_id).unwrap().to_vec())
     }
 
-    pub fn get_tokens_metadata_by_owner(&self, owner_id: AccountId) -> Vec<TokenMetadata> {
+    pub fn get_tokens_metadata_by_owner(&self, owner_id: AccountId) -> Vec<Token> {
         let tokens = self
             .tokens
             .tokens_per_owner
@@ -37,14 +37,7 @@ impl Contract {
         let metadata = tokens
             .unwrap()
             .iter()
-            .map(|x| {
-                self.tokens
-                    .token_metadata_by_id
-                    .as_ref()
-                    .unwrap()
-                    .get(&x)
-                    .unwrap()
-            })
+            .map(|x| self.tokens.nft_token(x).unwrap())
             .collect::<Vec<_>>();
 
         metadata
